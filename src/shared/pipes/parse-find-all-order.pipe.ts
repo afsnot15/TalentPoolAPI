@@ -3,7 +3,7 @@ import { EMensagem } from '../enums/mensagem.enum';
 import { IFindAllOrder } from '../interfaces/find-all-order.interface';
 
 @Injectable()
-export class ParseFindAllOrder implements PipeTransform {
+export class ParseFindAllOrderPipe implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   transform(value: any, metadata: ArgumentMetadata) {
     try {
