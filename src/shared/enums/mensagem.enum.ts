@@ -11,4 +11,5 @@ export enum EMensagem {
   IDsDivergente = 'IDs divergentes!',
   ImpossivelAlterar = 'Impossível alterar!',
   RegistroNaoEcontrado = 'Registro Não Encontrado!',
+  RegistroDuplicado = 'Registro duplicado!',
 }

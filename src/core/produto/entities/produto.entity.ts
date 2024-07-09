@@ -18,8 +18,6 @@ export class Produto {
     type: 'numeric',
     precision: 13,
     scale: 3,
-    nullable: false,
-    default: 0,
   })
   custo: number;
 

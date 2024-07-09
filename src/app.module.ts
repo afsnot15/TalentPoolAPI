@@ -1,10 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { DatabaseModule } from './config/database/database.module';
-import { ProdutoModule } from './core/produto/produto.module';
 import { LojaModule } from './core/loja/loja.module';
+import { ProdutoModule } from './core/produto/produto.module';
+import { LoggerMiddleware } from './shared/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -16,7 +15,9 @@ import { LojaModule } from './core/loja/loja.module';
     ProdutoModule,
     LojaModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

@@ -20,6 +20,8 @@ export class ProdutoService {
   private produtoLojaRepository: Repository<ProdutoLoja>;
 
   async create(pCreateProdutoDto: CreateProdutoDto): Promise<Produto> {
+    this.validateProdutoLojaDuplicate(pCreateProdutoDto);
+
     const created = this.repository.create(new Produto(pCreateProdutoDto));
 
     return await this.repository.save(created);
@@ -45,7 +47,15 @@ export class ProdutoService {
   }
 
   async findOne(pId: number): Promise<Produto> {
-    return await this.repository.findOne({ where: { id: pId } });
+    return await this.repository.findOne({
+      where: { id: pId },
+
+      relations: {
+        produtoLoja: {
+          loja: true,
+        },
+      },
+    });
   }
 
   async update(
@@ -55,6 +65,8 @@ export class ProdutoService {
     this.validateId(pId, pUpdateProdutoDto.id);
 
     await this.validateFindedProduto(pId);
+
+    this.validateProdutoLojaDuplicate(pUpdateProdutoDto);
 
     await this.saveProdutoLoja(pUpdateProdutoDto);
 
@@ -104,5 +116,24 @@ export class ProdutoService {
         idPrduto: pUpdateProdutoDto.id,
       });
     }
+  }
+
+  private validateProdutoLojaDuplicate(
+    pCreateProdutoDto: CreateProdutoDto | UpdateProdutoDto,
+  ): void {
+    pCreateProdutoDto.produtoLoja.forEach((produtoLoja) => {
+      const count = pCreateProdutoDto.produtoLoja.filter(
+        (p) =>
+          p.idLoja === produtoLoja.idLoja &&
+          p.idProduto === produtoLoja.idProduto,
+      ).length;
+
+      if (count > 1) {
+        throw new HttpException(
+          EMensagem.RegistroDuplicado,
+          HttpStatus.NOT_ACCEPTABLE,
+        );
+      }
+    });
   }
 }

@@ -10,8 +10,8 @@ services:
       - "7000:7000"
     volumes:
       - .:/home/node/app
-
-  db-template:
+    
+  db-talentpoolapi:
     container_name: db-talentpoolapi
     build:
       context: .docker/postgres

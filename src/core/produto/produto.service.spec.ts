@@ -54,10 +54,27 @@ describe('ProdutoService', () => {
         descricao: 'Produto 1',
         custo: 10.37,
         imagem: 'base64',
-        produtoLoja: [],
+        produtoLoja: [
+          {
+            idProduto: 1,
+            idLoja: 1,
+            precoVenda: 20.5,
+          },
+          {
+            idProduto: 1,
+            idLoja: 2,
+            precoVenda: 20.5,
+          },
+        ],
       };
 
-      const produtoMock = Object.assign(createProdutoDto, { id: 1 });
+      const produtoLojaMock = Object.assign(createProdutoDto.produtoLoja[0]);
+
+      const produtoMock = Object.assign(
+        createProdutoDto,
+        { id: 1 },
+        produtoLojaMock,
+      );
 
       const spyRepositorySave = jest
         .spyOn(repository, 'save')
@@ -67,6 +84,36 @@ describe('ProdutoService', () => {
 
       expect(response).toEqual(produtoMock);
       expect(spyRepositorySave).toHaveBeenCalled();
+    });
+
+    it('Deve lançar uma excpetion para produto loja duplicado', async () => {
+      const createProdutoDto = {
+        descricao: 'Produto 1',
+        custo: 10.37,
+        imagem: 'base64',
+        produtoLoja: [
+          {
+            idProduto: 1,
+            idLoja: 1,
+            precoVenda: 20.5,
+          },
+          {
+            idProduto: 1,
+            idLoja: 1,
+            precoVenda: 20.5,
+          },
+        ],
+      };
+
+      const spyRepositorySave = jest
+        .spyOn(produtoLojaRepository, 'save')
+        .mockReturnValue(Promise.resolve(null));
+
+      await expect(service.create(createProdutoDto)).rejects.toThrow(
+        EMensagem.RegistroDuplicado,
+      );
+
+      expect(spyRepositorySave).not.toHaveBeenCalled();
     });
   });
 
@@ -143,11 +190,46 @@ describe('ProdutoService', () => {
           .spyOn(repository, 'save')
           .mockReturnValue(Promise.resolve(updateProdutoMock));
 
+        const spyProdutoLojaRepositoryDelete = jest
+          .spyOn(produtoLojaRepository, 'delete')
+          .mockReturnValue(Promise.resolve(null));
+
         const response = await service.update(1, produtoMock);
 
         expect(response).toEqual(produtoMock);
         expect(spyRepositoryFindOne).toHaveBeenCalled();
         expect(spyRepositorySave).toHaveBeenCalled();
+        expect(spyProdutoLojaRepositoryDelete).toHaveBeenCalled();
+      });
+
+      it('Deve lançar uma excpetion para produto loja duplicado', async () => {
+        const produtoMock = {
+          id: 1,
+          imagem: 'base64',
+          descricao: 'Produto 1',
+          custo: 10.37,
+          produtoLoja: [
+            { id: 1, idProduto: 1, idLoja: 1, precoVenda: 20.5 },
+            { id: 1, idProduto: 1, idLoja: 1, precoVenda: 20.5 },
+          ],
+        };
+
+        const updateProdutoMock = Object.assign(produtoMock);
+
+        const spyRepositoryFindOne = jest
+          .spyOn(repository, 'findOne')
+          .mockReturnValue(Promise.resolve(updateProdutoMock));
+
+        const spyRepositorySave = jest
+          .spyOn(repository, 'save')
+          .mockReturnValue(Promise.resolve(updateProdutoMock));
+
+        await expect(service.update(1, updateProdutoMock)).rejects.toThrow(
+          EMensagem.RegistroDuplicado,
+        );
+
+        expect(spyRepositoryFindOne).toHaveBeenCalled();
+        expect(spyRepositorySave).not.toHaveBeenCalled();
       });
 
       it('Deve lançar uma exceção quando os ids forem diferentes ao alterar um usuário', async () => {
