@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  Query,
+  Query
 } from '@nestjs/common';
 import { HttpResponse } from '../../shared/classes/http-response';
 import { IFindAllFilter } from '../../shared/interfaces/find-all-filter.interface';
@@ -16,6 +16,7 @@ import { ParseFindAllFilterPipe } from '../../shared/pipes/parse-find-all-filter
 import { ParseFindAllOrderPipe } from '../../shared/pipes/parse-find-all-order.pipe';
 import { CreateProdutoDto } from './dto/create-produto.dto';
 import { UpdateProdutoDto } from './dto/update-produto.dto';
+import { ProdutoLoja } from './entities/produto-loja.entity';
 import { Produto } from './entities/produto.entity';
 import { ProdutoService } from './produto.service';
 
@@ -57,6 +58,15 @@ export class ProdutoController {
     return new HttpResponse<Produto>(data);
   }
 
+  @Get('produtoloja/:id')
+  async findProdutoLoja(
+    @Param('id') id: number,
+  ): Promise<IResponse<ProdutoLoja[]>> {
+    const data = await this.produtoService.findProdutoLoja(id);
+
+    return new HttpResponse<ProdutoLoja[]>(data);
+  }
+
   @Patch(':id')
   async update(
     @Param('id') id: number,
@@ -65,6 +75,13 @@ export class ProdutoController {
     const data = await this.produtoService.update(id, updateProdutoDto);
 
     return new HttpResponse<Produto>(data).onUpdated();
+  }
+
+  @Get('imagem/:id')
+  async findImagem(@Param('id') id: number): Promise<IResponse<string>> {
+    const data = await this.produtoService.findImagem(id);
+
+    return new HttpResponse<string>(data);
   }
 
   @Delete(':id')

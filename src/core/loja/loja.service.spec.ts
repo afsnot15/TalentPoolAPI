@@ -1,6 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { IFindAllOrder } from 'src/shared/interfaces/find-all-order.interface';
 import { Repository } from 'typeorm';
 import { EMensagem } from '../../shared/enums/mensagem.enum';
 import { Loja } from './entities/loja.entity';
@@ -20,7 +19,7 @@ describe('LojaService', () => {
             create: jest.fn(),
             save: jest.fn(),
             findOne: jest.fn(),
-            findAndCount: jest.fn(),
+            find: jest.fn(),
           },
         },
       ],
@@ -35,7 +34,7 @@ describe('LojaService', () => {
   });
 
   describe('create', () => {
-    it('Deve criar um novo produto', async () => {
+    it('Deve criar uma nava loja', async () => {
       const createLojaDto = {
         descricao: 'Loja 01',
       };
@@ -62,15 +61,13 @@ describe('LojaService', () => {
 
       const lojaListMock = [Object.assign(loja)];
 
-      const expected = { data: lojaListMock, count: 1, message: null };
-
-      const order: IFindAllOrder = { column: 'id', sort: 'asc' };
+      const expected = { data: lojaListMock, message: null };
 
       const spyRepositoryFind = jest
-        .spyOn(repository, 'findAndCount')
-        .mockReturnValue(Promise.resolve([lojaListMock, 1]));
+        .spyOn(repository, 'find')
+        .mockReturnValue(Promise.resolve(lojaListMock));
 
-      const response = await service.findAll(1, 10, order);
+      const response = await service.findAll();
 
       expect(spyRepositoryFind).toHaveBeenCalled();
       expect(response).toEqual(expected);

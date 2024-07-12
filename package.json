@@ -15,9 +15,10 @@
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage ",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:e2e": "jest --detectOpenHandles --config ./jest-e2e.json",
+    "test:e2e:cov": "jest --detectOpenHandles --config ./jest-e2e.json --coverage",
     "seed": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -n src/ormconfig-seed.ts",
     "typeorm": "node --require ts-node/register ./node_modules/typeorm/cli.js",
     "migrate": "npm run typeorm migration:generate -- -d src/ormconfig.ts",
@@ -82,7 +83,11 @@
     "coveragePathIgnorePatterns": [
       "main.ts",
       ".module.ts",
-      "src/migrations"
+      "src/migrations",
+      "src/seeds",
+      "src/ormconfig.ts",
+      "src/ormconfig-seed.ts"
+
     ]
   }
 }

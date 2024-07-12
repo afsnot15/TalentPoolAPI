@@ -20,8 +20,8 @@ describe('ProdutoService', () => {
           provide: getRepositoryToken(Produto),
           useValue: {
             create: jest.fn(),
-            findOne: jest.fn(),
             findAndCount: jest.fn(),
+            findOne: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
           },
@@ -32,6 +32,7 @@ describe('ProdutoService', () => {
             create: jest.fn(),
             save: jest.fn(),
             delete: jest.fn(),
+            find: jest.fn(),
           },
         },
       ],
@@ -167,6 +168,62 @@ describe('ProdutoService', () => {
 
         expect(finded).toEqual(produtoExpected);
         expect(spyRepositoryFindOne).toHaveBeenCalled();
+      });
+    });
+
+    describe('findProdutoLoja', () => {
+      it('Deve obter uma lista de produtoloja através do idProduto', async () => {
+        const mockProdutoLoja = [
+          {
+            id: 1,
+            idProduto: 1,
+            idLoja: 1,
+            precoVenda: 20.5,
+            loja: null,
+            produto: null,
+          },
+        ];
+
+        const spyRepositoryFinProdutoLoja = jest
+          .spyOn(produtoLojaRepository, 'find')
+          .mockReturnValue(Promise.resolve(mockProdutoLoja));
+
+        const finded = await service.findProdutoLoja(1);
+
+        expect(finded).toEqual(mockProdutoLoja);
+        expect(spyRepositoryFinProdutoLoja).toHaveBeenCalled();
+      });
+    });
+
+    describe('findImagem', () => {
+      it('Deve obter uma imagem através do id do produto', async () => {
+        const produtoExpected = {
+          id: 1,
+          descricao: 'Produto 1',
+          custo: 10.37,
+          imagem: 'base64',
+          produtoLoja: [],
+        };
+
+        const spyRepositoryFind = jest
+          .spyOn(repository, 'findOne')
+          .mockReturnValue(Promise.resolve(produtoExpected));
+
+        const finded = await service.findImagem(1);
+
+        expect(finded).toEqual(produtoExpected.imagem);
+        expect(spyRepositoryFind).toHaveBeenCalled();
+      });
+
+      it('Deve obter null através do id do produto nao encontrado', async () => {
+        const spyRepositoryFind = jest
+          .spyOn(repository, 'findOne')
+          .mockReturnValue(Promise.resolve(null));
+
+        const finded = await service.findImagem(1);
+
+        expect(finded).toEqual(null);
+        expect(spyRepositoryFind).toHaveBeenCalled();
       });
     });
 

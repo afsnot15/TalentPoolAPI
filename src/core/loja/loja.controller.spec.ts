@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IFindAllOrder } from 'src/shared/interfaces/find-all-order.interface';
 import { EMensagem } from '../../shared/enums/mensagem.enum';
 import { LojaController } from './loja.controller';
 import { LojaService } from './loja.service';
@@ -62,18 +61,15 @@ describe('LojaController', () => {
 
       const mockResponse = {
         data: mockListaLoja,
-        count: mockListaLoja.length,
       };
 
       const spyServicefindAll = jest
         .spyOn(service, 'findAll')
         .mockReturnValue(Promise.resolve(mockResponse) as any);
 
-      const order: IFindAllOrder = { column: 'id', sort: 'asc' };
+      const response = await controller.findAll();
 
-      const response = await controller.findAll(1, 10, order);
-
-      expect(spyServicefindAll).toHaveBeenCalledWith(1, 10, order, undefined);
+      expect(spyServicefindAll).toHaveBeenCalledWith();
       expect(response.data).toEqual(mockListaLoja);
       expect(response.message).toBe(undefined);
     });

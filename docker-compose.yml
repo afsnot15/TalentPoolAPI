@@ -10,6 +10,9 @@ services:
       - "7000:7000"
     volumes:
       - .:/home/node/app
+    depends_on:
+      db-talentpoolapi:
+        condition: service_healthy  
     
   db-talentpoolapi:
     container_name: db-talentpoolapi
@@ -25,3 +28,8 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "8745:8745"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -p 8745" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5  

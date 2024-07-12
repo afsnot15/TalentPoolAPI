@@ -58,6 +58,30 @@ export class ProdutoService {
     });
   }
 
+  async findProdutoLoja(pId: number): Promise<ProdutoLoja[]> {
+    return await this.produtoLojaRepository.find({
+      where: { idProduto: pId },
+
+      relations: {
+        loja: true,
+      },
+    });
+  }
+
+  async findImagem(pId: number): Promise<string> {
+    const produto = await this.repository.findOne({
+      loadEagerRelations: false,
+      select: ['imagem'],
+      where: { id: pId },
+    });
+
+    if (!produto) {
+      return null;
+    }
+
+    return produto.imagem;
+  }
+
   async update(
     pId: number,
     pUpdateProdutoDto: UpdateProdutoDto,
@@ -110,12 +134,6 @@ export class ProdutoService {
     await this.produtoLojaRepository.delete({
       idProduto: pUpdateProdutoDto.id,
     });
-
-    for (const produtoLoja in pUpdateProdutoDto.produtoLoja) {
-      Object.assign(pUpdateProdutoDto.produtoLoja[produtoLoja], {
-        idPrduto: pUpdateProdutoDto.id,
-      });
-    }
   }
 
   private validateProdutoLojaDuplicate(

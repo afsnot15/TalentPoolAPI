@@ -2,9 +2,6 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EMensagem } from '../../shared/enums/mensagem.enum';
-import { handleFilter } from '../../shared/helpers/sql.helper';
-import { IFindAllFilter } from '../../shared/interfaces/find-all-filter.interface';
-import { IFindAllOrder } from '../../shared/interfaces/find-all-order.interface';
 import { IResponse } from '../../shared/interfaces/response.interface';
 import { CreateLojaDto } from './dto/create-loja.dto';
 import { UpdateLojaDto } from './dto/update-loja.dto';
@@ -21,23 +18,12 @@ export class LojaService {
     return await this.repository.save(created);
   }
 
-  async findAll(
-    pPage: number,
-    pSize: number,
-    pOrder: IFindAllOrder,
-    pFilter?: IFindAllFilter | IFindAllFilter[],
-  ): Promise<IResponse<Loja[]>> {
-    const where = handleFilter(pFilter);
-
-    const [data, count] = await this.repository.findAndCount({
+  async findAll(): Promise<IResponse<Loja[]>> {
+    const data = await this.repository.find({
       loadEagerRelations: false,
-      order: { [pOrder.column]: pOrder.sort },
-      where,
-      skip: pSize * pPage,
-      take: pSize,
     });
 
-    return { data, count, message: null };
+    return { data, message: null };
   }
 
   async update(pId: number, pUpdateLojaDto: UpdateLojaDto): Promise<Loja> {

@@ -18,8 +18,10 @@ describe('ProdutoController', () => {
             create: jest.fn(),
             findAll: jest.fn(),
             findOne: jest.fn(),
+            findProdutoLoja: jest.fn(),
             update: jest.fn(),
             remove: jest.fn(),
+            findImagem: jest.fn(),
           },
         },
       ],
@@ -105,6 +107,43 @@ describe('ProdutoController', () => {
 
       expect(spyServiceFindOne).toHaveBeenCalledWith(1);
       expect(response.data).toEqual(mockProduto);
+      expect(response.message).toBe(undefined);
+    });
+  });
+
+  describe('findImagem', () => {
+    it('Deve obter a imagem do produto', async () => {
+      const mockImage = 'base64';
+
+      const spyServiceFindImage = jest
+        .spyOn(service, 'findImagem')
+        .mockReturnValue(Promise.resolve('base64') as any);
+
+      const response = await controller.findImagem(1);
+
+      expect(spyServiceFindImage).toHaveBeenCalledWith(1);
+      expect(response.data).toEqual(mockImage);
+    });
+  });
+
+  describe('findProdutoLoja', () => {
+    it('Deve obter uma lista de produtoLoja', async () => {
+      const mockProdutoLoja = [
+        {
+          id: 1,
+          idProduto: 1,
+          idLoja: 1,
+        },
+      ];
+
+      const spyServiceFindOne = jest
+        .spyOn(service, 'findProdutoLoja')
+        .mockReturnValue(Promise.resolve(mockProdutoLoja) as any);
+
+      const response = await controller.findProdutoLoja(1);
+
+      expect(spyServiceFindOne).toHaveBeenCalledWith(1);
+      expect(response.data).toEqual(mockProdutoLoja);
       expect(response.message).toBe(undefined);
     });
   });

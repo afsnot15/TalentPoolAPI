@@ -31,9 +31,4 @@ export class HttpResponse<T> implements IResponse<T> {
     this.message = EMensagem.ExcluidoSucesso;
     return this;
   }
-
-  onUnactivated(): IResponse<T> {
-    this.message = EMensagem.DesativadoSucesso;
-    return this;
-  }
 }

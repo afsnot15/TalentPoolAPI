@@ -12,7 +12,7 @@ export const handleFilter = (filter: IFindAllFilter | IFindAllFilter[]) => {
 
   for (const f of filters) {
     if (!f.value) {
-      return whereClause;
+      continue;
     }
 
     if (f.value === 'true' || f.value === 'false') {
