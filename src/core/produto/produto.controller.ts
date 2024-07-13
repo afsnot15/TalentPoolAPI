@@ -6,7 +6,7 @@ import {
   Param,
   Patch,
   Post,
-  Query
+  Query,
 } from '@nestjs/common';
 import { HttpResponse } from '../../shared/classes/http-response';
 import { IFindAllFilter } from '../../shared/interfaces/find-all-filter.interface';

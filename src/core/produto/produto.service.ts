@@ -79,7 +79,7 @@ export class ProdutoService {
       return null;
     }
 
-    return produto.imagem;
+    return Buffer.from(produto.imagem).toString();
   }
 
   async update(
@@ -95,6 +95,18 @@ export class ProdutoService {
     await this.saveProdutoLoja(pUpdateProdutoDto);
 
     return await this.repository.save(pUpdateProdutoDto);
+  }
+
+  private base64ToByteArray(base64: string): Uint8Array {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+
+    for (let i = 0; i < len; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    return bytes;
   }
 
   async remove(pId: number): Promise<boolean> {
