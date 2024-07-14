@@ -27,6 +27,12 @@ docker exec -it api-talentpool npm run seed
 
 ## Excecução de testes
 
+- Atenção: "attach" no container através do comando:
+
+```bash
+docker exec -it api-talentpool
+```
+
 Para rodar os testes unitários e gerar o relatório de cobertura, execute o seguinte comando:
 
 ## Unit
@@ -36,12 +42,6 @@ npm run test:cov
 ```
 
 ## E2E
-
- - Atenção: "attach" no container através do comando:
-
-```bash
-docker exec -it api-talentpool
-```
 
 Para semear as informações necessárias para os testes E2E:
 
