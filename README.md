@@ -1,20 +1,27 @@
-# CodeLabAPITemplate
+# TalentPoolAPI
 
-Este é um template para criação de uma API do CodeLab. Utilize este template para criar sua API NestJSS dentro
-de um Docker container.
+API para Cadastro de Produto, destinado ao Code Talent Pool da VR Software.
 
-Antes de iniciar o projeto a partir do template, verifique os TODO's e substitua pelos valores corretos
+## Iniciando Aplicação
 
-## Development Start
+Navegue até o diretório raiz do projeto.
+
+Execute o seguinte comando:
 
 ```bash
-docker compose up --build
-```
+ docker compose up
+ ```
+ou caso queria iniciar a aplicação em ambiente de testes:
+
+ ```bash
+ docker compose -f docker-compose-test.yml up
+ ```
+
+ - Atenção, caso a aplicação seja iniciada em ambiente de testes, os dados não serão persistidos.
 
 ## Excecução de testes
 
-- Atenção: "attach" ao container para executar os testes.
-- Caso não queira o coverage, remova o cov
+Para rodar os testes unitários e gerar o relatório de cobertura, execute o seguinte comando:
 
 ## Unit
 
@@ -23,6 +30,20 @@ npm run test:cov
 ```
 
 ## E2E
+
+ - Atenção: "attach" no container através do comando:
+
+```bash
+docker exec -it api-talentpool
+```
+
+Para semear as informações necessárias para os testes E2E:
+
+```bash
+npm run seed
+```
+
+Execução dos testes
 
 ```bash
 npm run test:e2e:cov

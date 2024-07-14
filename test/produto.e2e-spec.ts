@@ -135,8 +135,6 @@ describe('Usuario (e2e)', () => {
         `/produto/1/10/${order}`,
       );
 
-      console.log('Resposta' + JSON.stringify(resp.body));
-
       expect(resp).toBeDefined();
       expect(resp.body.message).toBe(null);
       expect(resp.body.data.length).toBe(10);
