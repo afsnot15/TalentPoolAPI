@@ -25,7 +25,7 @@ export class ProdutoLoja {
     name: 'precovenda',
     type: 'numeric',
     precision: 13,
-    scale: 2,
+    scale: 3,
     nullable: false,
   })
   precoVenda: number;

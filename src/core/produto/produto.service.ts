@@ -35,10 +35,23 @@ export class ProdutoService {
   ): Promise<IResponse<Produto[]>> {
     const where = handleFilter(pFilter);
 
+    const whereProduto = { ...where };
+    const whereProdutoLojaConditions = ['precoVenda'];
+    const filtroProdutoLoja: any = {};
+
+    whereProdutoLojaConditions.forEach((condition) => {
+      if (whereProduto[condition] !== undefined) {
+        filtroProdutoLoja[condition] = whereProduto[condition];
+        delete whereProduto[condition];
+      }
+    });
+
     const [data, count] = await this.repository.findAndCount({
-      loadEagerRelations: false,
+      loadEagerRelations: true,
+      relations: ['produtoLoja'],
+      select: ['id', 'descricao', 'custo'],
       order: { [pOrder.column]: pOrder.sort },
-      where,
+      where: { ...whereProduto, produtoLoja: filtroProdutoLoja },
       skip: pSize * pPage,
       take: pSize,
     });
