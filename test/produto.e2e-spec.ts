@@ -36,7 +36,7 @@ describe('Usuario (e2e)', () => {
   });
 
   afterAll(async () => {
-    //   await repository.delete({});
+    await repository.delete({});
     await app.close();
   });
 

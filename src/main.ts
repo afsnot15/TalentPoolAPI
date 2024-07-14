@@ -26,7 +26,7 @@ async function bootstrap() {
 bootstrap();
 
 function setupOpenAPI(app: INestApplication): void {
-  const config = new DocumentBuilder().setTitle('CodeLabAPITemplate').build();
+  const config = new DocumentBuilder().setTitle('TalentPoolAPI').build();
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('docs', app, document, { useGlobalPrefix: true });
