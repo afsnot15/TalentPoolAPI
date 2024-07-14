@@ -17,6 +17,12 @@ ou caso queria iniciar a aplicação em ambiente de testes:
  docker compose -f docker-compose-test.yml up
  ```
 
+Para semear os dados necessárias para funcionamento da aplicação:
+
+```bash
+docker exec -it api-talentpool npm run seed
+```
+
  - Atenção, caso a aplicação seja iniciada em ambiente de testes, os dados não serão persistidos.
 
 ## Excecução de testes
